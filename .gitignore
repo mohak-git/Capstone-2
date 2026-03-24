@@ -1,2 +1,3 @@
 venv/
 dataset/images/
+output/segmented-characters
