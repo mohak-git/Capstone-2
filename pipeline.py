@@ -272,17 +272,33 @@ def run_pipeline():
                 {"x": x, "y": y, "w": w_comp, "h": h, "crop": padded_crop}
             )
 
+        # --- 4. SAVING ---
+        bbox_img = cv2.cvtColor(split_binary * 255, cv2.COLOR_GRAY2BGR)
+
         image_out_dir = os.path.join(OUTPUT_DIR, base_name)
         for zone in ["upper", "middle", "lower"]:
             os.makedirs(os.path.join(image_out_dir, zone), exist_ok=True)
 
         for zone in categorized_components:
             categorized_components[zone].sort(key=lambda item: item["x"])
+
+            if zone == "upper":
+                color = (255, 0, 0)
+            elif zone == "middle":
+                color = (0, 0, 255)
+            else:
+                color = (0, 255, 0)
+
             for idx, comp in enumerate(categorized_components[zone]):
-                cx = comp["x"]
+                cx, cy, cw, ch = comp["x"], comp["y"], comp["w"], comp["h"]
                 cropped = comp["crop"]
+                cv2.rectangle(bbox_img, (cx, cy), (cx + cw, cy + ch), color, 1)
+
                 fname = f"{idx:02d}_x{cx}.png"
                 cv2.imwrite(os.path.join(image_out_dir, zone, fname), cropped)
+
+        bbox_save_path = os.path.join(image_out_dir, "segmentation_bboxes.png")
+        cv2.imwrite(bbox_save_path, bbox_img)
 
     print("Process successfully completed!")
 
