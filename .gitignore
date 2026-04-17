@@ -1,3 +1,6 @@
 venv/
 dataset/images/
+classes/
 output/segmented-characters
+
+.agent/
