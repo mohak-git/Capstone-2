@@ -1,41 +1,18 @@
-# Half Character Model Setup Guide
+# Half Character Recognition Model
 
-Guide for preparing the dataset and training the specialized Devanagari **Half Character (अर्धाक्षर)** recognition model.
+3-stage CNN (64x64 single-channel) for authentic stemless Devanagari half-consonants.
 
----
+## Classes (26 Total)
+- `01_ka` (क्), `02_kha` (ख्), `03_ga` (ग्), `04_gha` (घ्), `05_ca` (च्), `06_ja` (ज्), `07_jha` (झ्), `08_nya` (ञ्), `09_nna` (ण्), `10_ta` (त्), `11_tha` (थ्), `12_dha` (ध्), `13_na` (न्), `14_pa` (प्), `15_pha` (फ्), `16_ba` (ब्), `17_bha` (भ्), `18_ma` (म्), `19_ya` (य्), `20_la` (ल्), `21_va` (व्), `22_sha` (श्), `23_ssa` (ष्), `24_sa` (स्), `25_ksha` (क्ष्), `26_jnya` (ज्ञ्)
 
-## 1. Dataset Generation
+## Files
+- `01_generate_dataset.py` - Synthetic generator with ZWJ half-form extraction
+- `02_train_model.py` - CNN training script (Adam, CrossEntropy)
+- `classes.json` - Class codepoints & labels
+- `half_character.pth` - Saved weights
 
-Since standard datasets only contain full characters, we generate authentic half-character glyphs using OpenType text shaping (`HarfBuzz` + `FreeType`) across 16 diverse Devanagari fonts (calligraphy, handwriting, serif, sans-serif).
-
-### Step 1: Download Fonts
-
-```bash
-python model/half_character/download_fonts.py
-```
-
-- Fetches Google Fonts (`Kalam`, `Dekko`, `NotoSans`, `RozhaOne`, etc.) and system fonts into `model/half_character/fonts/`.
-
-### Step 2: Generate Augmented Dataset
-
+## Commands
 ```bash
 python model/half_character/01_generate_dataset.py
+python model/half_character/02_train_model.py --epochs 20 --batch-size 64
 ```
-
-- Shapes true half-glyphs (stripping the vertical _pai_ stem).
-- Applies pipeline-matching handwriting augmentations (pen thickness dilation/erosion, rotation $\pm 8^\circ$, slant, and top shirorekha-cut clipping).
-- Saves:
-  - `model/half_character/dataset/train` (160 samples per class)
-  - `model/half_character/dataset/test` (40 samples per class)
-
----
-
-## 2. Training the Model
-
-```bash
-python model/half_character/03_train_half_model.py
-```
-
-- Model: **ResNet-18** (37 output classes).
-- Image Size: 224×224 (normalized).
-- Weights output: `model/half_character/half_resnet18.pth`.

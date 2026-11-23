@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "u_matra", "folder": "01_u_matra", "sign": "ु", "code": "\u0941", "description": "hook below the letter" },
+  { "id": 2, "name": "uu_matra", "folder": "02_uu_matra", "sign": "ू", "code": "\u0942", "description": "reversed hook below" },
+  { "id": 3, "name": "vocalic_r", "folder": "03_vocalic_r", "sign": "ृ", "code": "\u0943", "description": "small curved hook below" },
+  { "id": 4, "name": "vocalic_rr", "folder": "04_vocalic_rr", "sign": "ॄ", "code": "\u0944", "description": "double hook below (Sanskrit)" },
+  { "id": 5, "name": "halant", "folder": "05_halant", "sign": "्", "code": "\u094d", "description": "diagonal virama stroke below" },
+  { "id": 6, "name": "nukta", "folder": "06_nukta", "sign": "़", "code": "\u093c", "description": "dot below consonant" },
+  { "id": 7, "name": "rakar", "folder": "07_rakar", "sign": "्र", "code": "\u094d\u0930", "description": "inverted caret under stemless consonants" }
+]
+

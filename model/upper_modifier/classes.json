@@ -1,0 +1,14 @@
+[
+  { "id": 1, "name": "i_matra", "folder": "01_i_matra", "sign": "ि", "code": "\u093f", "with_stem": true, "description": "arc and vertical stem on the left" },
+  { "id": 2, "name": "ii_matra", "folder": "02_ii_matra", "sign": "ी", "code": "\u0940", "with_stem": true, "description": "arc and vertical stem on the right" },
+  { "id": 3, "name": "e_matra", "folder": "03_e_matra", "sign": "े", "code": "\u0947", "with_stem": false, "description": "single slanted stroke above headline" },
+  { "id": 4, "name": "ai_matra", "folder": "04_ai_matra", "sign": "ै", "code": "\u0948", "with_stem": false, "description": "double stroke above headline" },
+  { "id": 5, "name": "o_matra", "folder": "05_o_matra", "sign": "ो", "code": "\u094b", "with_stem": true, "description": "right vertical stem with top stroke" },
+  { "id": 6, "name": "au_matra", "folder": "06_au_matra", "sign": "ौ", "code": "\u094c", "with_stem": true, "description": "right vertical stem with double top stroke" },
+  { "id": 7, "name": "candra_e", "folder": "07_candra_e", "sign": "ॅ", "code": "\u0945", "with_stem": false, "description": "candra crescent above headline" },
+  { "id": 8, "name": "candra_o", "folder": "08_candra_o", "sign": "ॉ", "code": "\u0949", "with_stem": true, "description": "right vertical stem with candra crescent" },
+  { "id": 9, "name": "anusvara", "folder": "09_anusvara", "sign": "ं", "code": "\u0902", "with_stem": false, "description": "bindu dot above headline" },
+  { "id": 10, "name": "chandrabindu", "folder": "10_chandrabindu", "sign": "ँ", "code": "\u0901", "with_stem": false, "description": "candra crescent with center dot" },
+  { "id": 11, "name": "reph", "folder": "11_reph", "sign": "र्", "code": "\u0930\u094d", "with_stem": false, "description": "hook glyph above consonant" }
+]
+

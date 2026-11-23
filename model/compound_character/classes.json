@@ -1,0 +1,23 @@
+[
+  { "id": 1, "name": "01_ksha", "folder": "01_ksha", "char": "क्ष", "code": "\u0915\u094d\u0937" },
+  { "id": 2, "name": "02_tra", "folder": "02_tra", "char": "त्र", "code": "\u0924\u094d\u0930" },
+  { "id": 3, "name": "03_jnya", "folder": "03_jnya", "char": "ज्ञ", "code": "\u091c\u094d\u091e" },
+  { "id": 4, "name": "04_shra", "folder": "04_shra", "char": "श्र", "code": "\u0936\u094d\u0930" },
+  { "id": 5, "name": "05_kra", "folder": "05_kra", "char": "क्र", "code": "\u0915\u094d\u0930" },
+  { "id": 6, "name": "06_gra", "folder": "06_gra", "char": "ग्र", "code": "\u0917\u094d\u0930" },
+  { "id": 7, "name": "07_pra", "folder": "07_pra", "char": "प्र", "code": "\u092a\u094d\u0930" },
+  { "id": 8, "name": "08_bra", "folder": "08_bra", "char": "ब्र", "code": "\u092c\u094d\u0930" },
+  { "id": 9, "name": "09_nka", "folder": "09_nka", "char": "ङ्क", "code": "\u0919\u094d\u0915" },
+  { "id": 10, "name": "10_nga", "folder": "10_nga", "char": "ङ्ग", "code": "\u0919\u094d\u0917" },
+  { "id": 11, "name": "11_ddha", "folder": "11_ddha", "char": "द्ध", "code": "\u0926\u094d\u0927" },
+  { "id": 12, "name": "12_dya", "folder": "12_dya", "char": "द्य", "code": "\u0926\u094d\u092f" },
+  { "id": 13, "name": "13_dva", "folder": "13_dva", "char": "द्व", "code": "\u0926\u094d\u0935" },
+  { "id": 14, "name": "14_shta", "folder": "14_shta", "char": "ष्ट", "code": "\u0937\u094d\u091f" },
+  { "id": 15, "name": "15_shtha", "folder": "15_shtha", "char": "ष्ठ", "code": "\u0937\u094d\u0920" },
+  { "id": 16, "name": "16_hma", "folder": "16_hma", "char": "ह्म", "code": "\u0939\u094d\u092e" },
+  { "id": 17, "name": "17_hya", "folder": "17_hya", "char": "ह्य", "code": "\u0939\u094d\u092f" },
+  { "id": 18, "name": "18_kta", "folder": "18_kta", "char": "क्त", "code": "\u0915\u094d\u0924" },
+  { "id": 19, "name": "19_tta", "folder": "19_tta", "char": "त्त", "code": "\u0924\u094d\u0924" },
+  { "id": 20, "name": "20_shca", "folder": "20_shca", "char": "श्च", "code": "\u0936\u094d\u091a" },
+  { "id": 21, "name": "21_shva", "folder": "21_shva", "char": "श्व", "code": "\u0936\u094d\u0935" }
+]
