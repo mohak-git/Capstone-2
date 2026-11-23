@@ -1,9 +1,8 @@
 """
-Training Script for Devanagari Compound Character (Conjunct / Ligature) Recognition Model.
-
+Training Script for Devanagari Full Character Recognition Model.
 Trains a lightweight 3-stage CNN on 64x64 single-channel glyphs.
-Default input dataset: model/compound_character/dataset (train/ and test/)
-Default model output:  model/compound_character/compound_character.pth
+Default input dataset: model/fullcharnew/dataset (train/ and test/)
+Default model output:  model/fullcharnew/fullcharnew.pth
 """
 
 import argparse
@@ -17,12 +16,12 @@ from tqdm import tqdm
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DATA_DIR = os.path.join(BASE_DIR, "dataset")
-DEFAULT_MODEL_OUT = os.path.join(BASE_DIR, "compound_character.pth")
+DEFAULT_MODEL_OUT = os.path.join(BASE_DIR, "full_character.pth")
 
 
-class CompoundCharacterCNN(nn.Module):
+class FullCharacterCNN(nn.Module):
     """
-    3-stage CNN for 64x64 Devanagari compound glyphs.
+    3-stage CNN for 64x64 Devanagari full-character glyphs.
     Follows Kore et al. (ELCVIA 2025):
       Conv(32) -> MaxPool -> Conv(64) -> MaxPool -> Conv(128) -> MaxPool -> Linear(256) -> Linear(128) -> Out
     """
@@ -90,7 +89,7 @@ def train(data_dir=DEFAULT_DATA_DIR, model_out=DEFAULT_MODEL_OUT, epochs=20, bat
     num_classes = len(classes)
     print(f"Classes ({num_classes}): {classes}")
 
-    model = CompoundCharacterCNN(num_classes=num_classes).to(device)
+    model = FullCharacterCNN(num_classes=num_classes).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
@@ -99,9 +98,11 @@ def train(data_dir=DEFAULT_DATA_DIR, model_out=DEFAULT_MODEL_OUT, epochs=20, bat
     for epoch in range(1, epochs + 1):
         # 1. Training Phase
         model.train()
-        train_loss, train_correct, train_total = 0.0, 0, 0
+        train_loss = 0.0
+        train_correct = 0
+        total_train = 0
 
-        pbar = tqdm(train_loader, desc=f"Epoch [{epoch:02d}/{epochs:02d}]", leave=False)
+        pbar = tqdm(train_loader, desc=f"Epoch {epoch}/{epochs} [Train]", leave=False)
         for images, labels in pbar:
             images, labels = images.to(device), labels.to(device)
 
@@ -114,15 +115,18 @@ def train(data_dir=DEFAULT_DATA_DIR, model_out=DEFAULT_MODEL_OUT, epochs=20, bat
             train_loss += loss.item() * images.size(0)
             preds = outputs.argmax(dim=1)
             train_correct += (preds == labels).sum().item()
-            train_total += labels.size(0)
-            pbar.set_postfix(loss=f"{loss.item():.4f}")
+            total_train += labels.size(0)
 
-        avg_train_loss = train_loss / train_total
-        avg_train_acc = train_correct / train_total
+            pbar.set_postfix(loss=loss.item(), acc=f"{train_correct / total_train:.3f}")
 
-        # 2. Evaluation Phase
+        epoch_train_loss = train_loss / total_train
+        epoch_train_acc = train_correct / total_train
+
+        # 2. Testing Phase
         model.eval()
-        test_loss, test_correct, test_total = 0.0, 0, 0
+        test_loss = 0.0
+        test_correct = 0
+        total_test = 0
 
         with torch.no_grad():
             for images, labels in test_loader:
@@ -133,19 +137,20 @@ def train(data_dir=DEFAULT_DATA_DIR, model_out=DEFAULT_MODEL_OUT, epochs=20, bat
                 test_loss += loss.item() * images.size(0)
                 preds = outputs.argmax(dim=1)
                 test_correct += (preds == labels).sum().item()
-                test_total += labels.size(0)
+                total_test += labels.size(0)
 
-        avg_test_loss = test_loss / test_total
-        avg_test_acc = test_correct / test_total
+        epoch_test_loss = test_loss / total_test
+        epoch_test_acc = test_correct / total_test
 
         print(
-            f"Epoch {epoch:02d}/{epochs:02d} | "
-            f"Train Loss: {avg_train_loss:.4f} Acc: {avg_train_acc*100:.2f}% | "
-            f"Test Loss: {avg_test_loss:.4f} Acc: {avg_test_acc*100:.2f}%"
+            f"Epoch {epoch:02d}/{epochs} | "
+            f"Train Loss: {epoch_train_loss:.4f} Acc: {epoch_train_acc:.4f} | "
+            f"Test Loss: {epoch_test_loss:.4f} Acc: {epoch_test_acc:.4f}"
         )
 
-        if avg_test_acc > best_test_acc:
-            best_test_acc = avg_test_acc
+        if epoch_test_acc > best_test_acc:
+            best_test_acc = epoch_test_acc
+            os.makedirs(os.path.dirname(os.path.abspath(model_out)), exist_ok=True)
             torch.save(
                 {
                     "model_state_dict": model.state_dict(),
@@ -156,28 +161,25 @@ def train(data_dir=DEFAULT_DATA_DIR, model_out=DEFAULT_MODEL_OUT, epochs=20, bat
                 },
                 model_out,
             )
+            print(f"  -> Saved new best model to '{model_out}' (Acc: {best_test_acc:.4f})")
 
-    print(f"\nTraining complete. Best test accuracy: {best_test_acc*100:.2f}%")
-    print(f"Model saved to: {model_out}")
+    print(f"\nTraining Complete. Best Test Accuracy: {best_test_acc:.4f}")
+    return model, best_test_acc
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Train Devanagari compound character model")
-    parser.add_argument("--data", default=DEFAULT_DATA_DIR, help="Path to dataset directory")
-    parser.add_argument("--out", default=DEFAULT_MODEL_OUT, help="Path to output .pth file")
-    parser.add_argument("--epochs", type=int, default=20, help="Epoch count")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Train Devanagari full-character CNN model.")
+    parser.add_argument("--data-dir", default=DEFAULT_DATA_DIR, help="Path to dataset root with train/ and test/")
+    parser.add_argument("--output", default=DEFAULT_MODEL_OUT, help="Path to save trained weights .pth")
+    parser.add_argument("--epochs", type=int, default=20, help="Number of training epochs")
     parser.add_argument("--batch-size", type=int, default=64, help="Batch size")
     parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate")
     args = parser.parse_args()
 
     train(
-        data_dir=args.data,
-        model_out=args.out,
+        data_dir=args.data_dir,
+        model_out=args.output,
         epochs=args.epochs,
         batch_size=args.batch_size,
         lr=args.lr,
     )
-
-
-if __name__ == "__main__":
-    main()
